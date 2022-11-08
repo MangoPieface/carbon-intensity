@@ -1,8 +1,22 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
+import { useState } from "react";
 
 export default function Home() {
+  const [events, setevents] = useState([]);
+ 
+  const fetchEvents = async () => {
+    
+    const event1 = await fetch("/api/carbon/2022-02-01");
+    const event2 = await fetch("/api/carbon/2022-02-02");
+    const event1data = await event1.json();
+    const event2data = await event2.json();
+    const events = [event1data, event2data];
+
+    setevents(events);
+  };
+
   return (
     <div className={styles.container}>
       <Head>
@@ -18,14 +32,19 @@ export default function Home() {
 
         <p className={styles.description}>
           Todays star studded events, who will consume the most energy, what a time to be alive!
-        </p>
+          </p>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Event</h2>
-            <p>Some event.</p>
-          </a>
-        </div>
+          <button onClick={fetchEvents}>Get events</button>
+     
+          {events.map((event) => {
+            return (
+              <div key={event.requestedDate} className={styles.grid}>
+                  <h2>{event.carbonTotal}</h2>
+              </div>
+            );
+          })}
+        
+                
       </main>
 
       <footer className={styles.footer}>
@@ -41,5 +60,5 @@ export default function Home() {
         </a>
       </footer>
     </div>
-  )
+  );
 }
