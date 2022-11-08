@@ -8,8 +8,23 @@ export default function Home({ data }) {
   const [events, setevents] = useState([]);
  
   const fetchEvents = async () => {
+    document.getElementsByClassName('results')[0].innerHTML = '';
+    document.getElementsByClassName('results')[0].setAttribute('class', 'results');
+    
+    const boxes = Array.from(document.getElementsByClassName('total'));
+
+    boxes.forEach((box, index) => {
+      box.setAttribute('class', 'total hidden');
+    });
+
     var event1 = eventData.events[Math.floor(Math.random() * eventData.events.length)];
     var event2 = eventData.events[Math.floor(Math.random() * eventData.events.length)];
+    if(event1.name == event2.name){
+      event2 = eventData.events[Math.floor(Math.random() * eventData.events.length)];
+    }
+    if(event1.name == event2.name){
+      event2 = eventData.events[Math.floor(Math.random() * eventData.events.length)];
+    }
 
     const carbon1 = await fetch(`/api/carbon/${event1.date}`);
     const carbon2 = await fetch(`/api/carbon/${event2.date}`);
@@ -26,12 +41,18 @@ export default function Home({ data }) {
   };
 
   function reveal(correct) {
-    if(correct) { alert('You win'); } else { alert('You lose'); }
+    //if(correct) { alert('You win'); } else { alert('You lose'); }
+
+    const resultsBlock = document.getElementsByClassName('results')[0];
+
+    resultsBlock.innerHTML = correct ? 'You win!' : 'You lose!';
+
+    resultsBlock.setAttribute('class', correct ? 'results green innerbox' : 'results red innerbox');
 
     const boxes = Array.from(document.getElementsByClassName('hidden'));
 
     boxes.forEach((box, index) => {
-      box.removeAttribute('class');
+      box.setAttribute('class', 'total');
     });
   }
 
@@ -60,7 +81,7 @@ export default function Home({ data }) {
                   <h2>{event.name}</h2>
                   <p>{event.date}</p>
                   <Image src={event.image} width={140} height={100} />  
-                  <p className={"result hidden"}>{event.carbon}</p>
+                  <p className={"total hidden"}>{event.carbon}</p>
               </a>
             );
           })}
