@@ -13,6 +13,7 @@ export default function Home({ data }) {
 
     const carbon1 = await fetch(`/api/carbon/${event1.date}`);
     const carbon2 = await fetch(`/api/carbon/${event2.date}`);
+
     const carbon1data = await carbon1.json();
     const carbon2data = await carbon2.json();
 

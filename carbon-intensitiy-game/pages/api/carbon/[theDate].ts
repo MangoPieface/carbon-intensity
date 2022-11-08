@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import fetch from 'node-fetch'
-import { createSecureContext } from 'tls'
+import cacheData from 'memory-cache';
 
 type Carbon = {
     data: Reading[]
@@ -34,20 +34,25 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<DayTotal>
 ) {
-    const { theDate } = req.query
-   
-    console.log('value from route ' + theDate);
-    console.log(`https://api.carbonintensity.org.uk/intensity/${theDate}`)
-    const request = await fetch(`https://api.carbonintensity.org.uk/intensity/date/${theDate}`)
+    const { theDate } = req.query;
+
+    const url = `https://api.carbonintensity.org.uk/intensity/date/${theDate}`;
+    var value = cacheData.get(url);
+    if (!value) {
+        const hours = 24;
+        value = await fetchData(url);
+        cacheData.put(url, value, hours * 1000 * 60 * 60);
+    }
+
+    res.status(200).send(value)
+}
+
+async function fetchData(url){
+    const request = await fetch(url)
     var carbonInfo = await request.json() as Carbon 
     
-    const total = carbonInfo.data.reduce((sum, current) => 
+    var apiResult = carbonInfo.data.reduce((sum, current) => 
            sum + (current.intensity.actual ?? current.intensity.forecast), 0);
-    console.log(total + ' from reduce')
 
-    var a = new DayTotal(carbonInfo.data[0].from, total);
-    
-
-
-    res.status(200).send(a)
+    return new DayTotal(carbonInfo.data[0].from, apiResult)
 }
