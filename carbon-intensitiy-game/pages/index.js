@@ -2,14 +2,20 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useState } from "react";
-import eventData from '../public/events-data.json';
+//import eventData from '../public/events-data.json';
+import { PrismaClient } from '@prisma/client'
+
 
 export default function Home({ data }) {
   const [events, setevents] = useState([]);
+
+  console.log('steve' + data.length);
+
+
  
   const fetchEvents = async () => {
-    var event1 = eventData.events[Math.floor(Math.random() * eventData.events.length)];
-    var event2 = eventData.events[Math.floor(Math.random() * eventData.events.length)];
+    var event1 = data[0];
+    var event2 = data[1];
 
     const carbon1 = await fetch(`/api/carbon/${event1.date}`);
     const carbon2 = await fetch(`/api/carbon/${event2.date}`);
@@ -83,4 +89,23 @@ export default function Home({ data }) {
       </footer>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+
+  const prisma = new PrismaClient()
+  
+  const data = await prisma.Events.findMany()
+  .catch(async (e) => {
+      console.error(e)
+      await prisma.$disconnect()
+      process.exit(1)
+  });
+
+  console.log('server' + data[1].eventId)
+ 
+  await prisma.$disconnect();
+  return {
+      props: { data },
+  }
 }
