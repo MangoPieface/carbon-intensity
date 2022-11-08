@@ -21,8 +21,15 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<Carbon>
 ) {
-    const request = await fetch('https://api.carbonintensity.org.uk/intensity/date')
-    const { data } = await request.json() as {data:Carbon}
-    console.log(data[0])
+   
+    const theDate = req.query.date;
+    console.log(`https://api.carbonintensity.org.uk/intensity/${theDate}`)
+    const request = await fetch(`https://api.carbonintensity.org.uk/intensity/date/${theDate}`)
+    const { data } = await request.json() as {data:Carbon} /// + date{}{date}
+    
+
+    
+
+
     res.status(200).send({ ...data })
 }
