@@ -2,13 +2,14 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useState } from "react";
-import { Events, PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import moment from 'moment';
 
 export default function Home({ data }) {
   const [events, setevents] = useState([]);
 
-  const eventList = data as Events[];
+
+  const eventList = data;
 
 
   const fetchEvents = async () => {
