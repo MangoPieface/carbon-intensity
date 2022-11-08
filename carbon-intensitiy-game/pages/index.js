@@ -6,19 +6,10 @@ import eventData from '../public/events-data.json';
 
 export default function Home({ data }) {
   const [events, setevents] = useState([]);
-
-  console.log(eventData);
  
   const fetchEvents = async () => {
-    console.log('FETCH ');
-    console.log(eventData);
-    console.log(eventData.events.length);
-    var myIndex = Math.floor(Math.random() * eventData.events.length);
-    //console.log(myIndex);
-    var event1 = eventData.events[myIndex];
+    var event1 = eventData.events[Math.floor(Math.random() * eventData.events.length)];
     var event2 = eventData.events[Math.floor(Math.random() * eventData.events.length)];
-    
-console.log(event1);
 
     const carbon1 = await fetch(`/api/carbon/${event1.date}`);
     const carbon2 = await fetch(`/api/carbon/${event2.date}`);
