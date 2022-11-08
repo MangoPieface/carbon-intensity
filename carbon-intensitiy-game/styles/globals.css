@@ -15,6 +15,25 @@ a {
   display: none;
 }
 
+.red {
+  background-color: rgb(220, 20, 60);
+  color: rgb(255, 255, 255);
+}
+
+.green {
+  background-color: rgb(144, 238, 144);
+  color: rgb(31, 45, 61);
+}
+
+.innerbox {
+  padding: 30px;
+  font-size: 120%;
+  font-family: "xSegoe UI",Arial,sans-serif;
+  font-weight: bold;
+  border-radius: 10px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
 * {
   box-sizing: border-box;
 }

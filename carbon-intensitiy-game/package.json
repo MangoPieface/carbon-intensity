@@ -1,24 +1,27 @@
 {
-  "name": "carbon-intensitiy-game",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@prisma/client": "^4.6.0",
-    "next": "13.0.2",
-    "node-fetch": "^3.2.10",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
-  },
-  "devDependencies": {
-    "@types/node": "18.11.9",
-    "@types/react": "18.0.25",
-    "eslint": "8.27.0",
-    "eslint-config-next": "13.0.2"
-  }
+    "name": "carbon-intensitiy-game",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@prisma/client": "^4.6.0",
+        "memory-cache": "^0.2.0",
+        "moment": "^2.29.4",
+        "next": "13.0.2",
+        "node-fetch": "^3.2.10",
+        "react": "18.2.0",
+        "react-dom": "18.2.0",
+        "react-moment": "^1.1.2"
+    },
+    "devDependencies": {
+        "@types/node": "18.11.9",
+        "@types/react": "18.0.25",
+        "eslint": "8.27.0",
+        "eslint-config-next": "13.0.2"
+    }
 }

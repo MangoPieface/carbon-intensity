@@ -3,27 +3,42 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useState } from "react";
 //import eventData from '../public/events-data.json';
-import { PrismaClient } from '@prisma/client'
-
+import { Events, PrismaClient } from '@prisma/client'
+import moment from 'moment';
 
 export default function Home({ data }) {
   const [events, setevents] = useState([]);
 
-  console.log('steve' + data.length);
+  const eventList = data as Events[];
 
 
- 
   const fetchEvents = async () => {
-    var event1 = data[0];
-    var event2 = data[1];
+    document.getElementsByClassName('results')[0].innerHTML = '';
+    document.getElementsByClassName('results')[0].setAttribute('class', 'results');
+    
+    const boxes = Array.from(document.getElementsByClassName('total'));
+
+    boxes.forEach((box, index) => {
+      box.setAttribute('class', 'total hidden');
+    });
+
+    var randomEventNumber = Math.floor(Math.random() * eventList.length);
+
+
+    console.log("Finding event ... " + randomEventNumber);
+    var event1 = eventList[Math.floor(randomEventNumber)]; 
+    eventList.splice(randomEventNumber, 1);
+  
+    var event2 = eventList[Math.floor(Math.random() * eventList.length)];
 
     const carbon1 = await fetch(`/api/carbon/${event1.date}`);
     const carbon2 = await fetch(`/api/carbon/${event2.date}`);
+
     const carbon1data = await carbon1.json();
     const carbon2data = await carbon2.json();
 
-    const eventModel1 = { date: event1.date, name: event1.name, carbon: carbon1data.carbonTotal, image: event1.image, correct: carbon1data.carbonTotal < carbon2data.carbonTotal };
-    const eventModel2 = { date: event2.date, name: event2.name, carbon: carbon2data.carbonTotal, image: event2.image, correct: carbon2data.carbonTotal < carbon1data.carbonTotal};
+    const eventModel1 = { date: event1.date, name: event1.name, carbon: carbon1data.carbonTotal, image: event1.image, correct: carbon1data.carbonTotal > carbon2data.carbonTotal };
+    const eventModel2 = { date: event2.date, name: event2.name, carbon: carbon2data.carbonTotal, image: event2.image, correct: carbon2data.carbonTotal > carbon1data.carbonTotal};
 
     const events = [eventModel1, eventModel2];
 
@@ -31,12 +46,19 @@ export default function Home({ data }) {
   };
 
   function reveal(correct) {
-    if(correct) { alert('You win'); } else { alert('You lose'); }
+
+    console.log('events ' + events);
+
+    const resultsBlock = document.getElementsByClassName('results')[0];
+
+    resultsBlock.innerHTML = correct ? 'You win!' : 'You lose!';
+
+    resultsBlock.setAttribute('class', correct ? 'results green innerbox' : 'results red innerbox');
 
     const boxes = Array.from(document.getElementsByClassName('hidden'));
 
     boxes.forEach((box, index) => {
-      box.removeAttribute('class');
+      box.setAttribute('class', 'total');
     });
   }
 
@@ -54,34 +76,36 @@ export default function Home({ data }) {
         </h1>
 
         <p className={styles.description}>
-          Todays star studded events, who will consume the most energy, what a time to be alive!
-          </p>
+          On which day was the UK National Grid's carbon intensity higher?
+        </p>
 
-          <button onClick={fetchEvents}>Get events</button>
+        <button onClick={fetchEvents}>Let's play!</button>
         <div className={styles.grid}>
-          {events.map((event) => {
+          { 
+          events.map((event) => {
             return (
-              <a key={event.date} className={styles.card} onClick={() => reveal(event.correct)}>
+              <a key={event.date} className={styles.card} onClick={() => reveal(event.correct, events)}>
                   <h2>{event.name}</h2>
                   <p>{event.date}</p>
-                  <Image src={event.image} width={140} height={100} />  
-                  <p className={"result hidden"}>{event.carbon}</p>
+                  <Image src={event.image} width={140} height={100} alt='image of event' />  
+                  <p className={"total hidden"}>{event.carbon}</p>
               </a>
             );
           })}
         </div>
 
         <div className="results"></div>
-                
+                 
       </main>
 
       <footer className={styles.footer}>
+      <p>This game uses data from the National Grid, Carbon Intensity API https://api.carbonintensity.org.uk/</p>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by
           <span className={styles.logo}>
           <Image src="/biscuit.jpg" alt="Mcvities Victoria biscuits" width={140} height={100} />            
           </span>
@@ -95,7 +119,7 @@ export async function getServerSideProps() {
 
   const prisma = new PrismaClient()
   
-  const data = await prisma.Events.findMany()
+  const data = await prisma.events.findMany()
   .catch(async (e) => {
       console.error(e)
       await prisma.$disconnect()

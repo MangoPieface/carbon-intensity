@@ -10,7 +10,7 @@ datasource db {
 model Events {
   id      String @id @default(auto()) @map("_id") @db.ObjectId
   date    String
-  eventId String
+  eventId Int
   image   String
   name    String
 }
