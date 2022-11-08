@@ -13,14 +13,12 @@ type Intensity = {
     index: string
 }
 
-type CarbonData = Data[]
-
-
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<Data>
 ) {
     const request = await fetch('https://api.carbonintensity.org.uk/intensity/date')
     const { data } = await request.json() as {data:Data}
+    console.log(data)
     res.status(200).send({ ...data })
 }
