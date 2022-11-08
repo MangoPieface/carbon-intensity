@@ -2,17 +2,26 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useState } from "react";
+import eventData from '../public/events-data.json';
 
-export default function Home() {
+export default function Home({ data }) {
   const [events, setevents] = useState([]);
+
+  console.log(eventData);
  
   const fetchEvents = async () => {
+    var myIndex = Math.floor(Math.random() * eventData.length);
+    console.log(myIndex);
+    var event1 = eventData[myIndex];
+    var event2 = eventData[Math.floor(Math.random() * eventData.length)];
     
-    const event1 = await fetch("/api/carbon/2022-02-01");
-    const event2 = await fetch("/api/carbon/2022-02-02");
-    const event1data = await event1.json();
-    const event2data = await event2.json();
-    const events = [event1data, event2data];
+console.log(event1);
+
+    const carbon1 = await fetch(`/api/carbon/${event1.date}`);
+    const carbon2 = await fetch(`/api/carbon/${event2.date}`);
+    const carbon1data = await carbon1.json();
+    const carbon2data = await carbon2.json();
+    const events = [carbon1data, carbon2data];
 
     setevents(events);
   };
@@ -61,4 +70,13 @@ export default function Home() {
       </footer>
     </div>
   );
+}
+
+// This gets called on every request
+export async function getServerSideProps() {
+  // Fetch data from external API
+  const data = "HELLO";
+
+  // Pass data to the page via props
+  return { props: { data } }
 }
