@@ -17,8 +17,8 @@ export default function Home({ data }) {
     const carbon1data = await carbon1.json();
     const carbon2data = await carbon2.json();
 
-    const eventModel1 = { date: event1.date, name: event1.name, carbon: carbon1data.carbonTotal, image: event1.image, correct: carbon1data.carbonTotal < carbon2data.carbonTotal };
-    const eventModel2 = { date: event2.date, name: event2.name, carbon: carbon2data.carbonTotal, image: event2.image, correct: carbon2data.carbonTotal < carbon1data.carbonTotal};
+    const eventModel1 = { date: event1.date, name: event1.name, carbon: carbon1data.carbonTotal, image: event1.image, correct: carbon1data.carbonTotal > carbon2data.carbonTotal };
+    const eventModel2 = { date: event2.date, name: event2.name, carbon: carbon2data.carbonTotal, image: event2.image, correct: carbon2data.carbonTotal > carbon1data.carbonTotal};
 
     const events = [eventModel1, eventModel2];
 
@@ -49,10 +49,10 @@ export default function Home({ data }) {
         </h1>
 
         <p className={styles.description}>
-          Todays star studded events, who will consume the most energy, what a time to be alive!
-          </p>
+          On which day was the UK National Grid's carbon intensity higher?
+        </p>
 
-          <button onClick={fetchEvents}>Get events</button>
+        <button onClick={fetchEvents}>Let's play!</button>
         <div className={styles.grid}>
           {events.map((event) => {
             return (
