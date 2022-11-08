@@ -34,8 +34,9 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse<DayTotal>
 ) {
+    const { theDate } = req.query
    
-    const theDate = req.query.date;
+    console.log('value from route ' + theDate);
     console.log(`https://api.carbonintensity.org.uk/intensity/${theDate}`)
     const request = await fetch(`https://api.carbonintensity.org.uk/intensity/date/${theDate}`)
     var carbonInfo = await request.json() as Carbon 
