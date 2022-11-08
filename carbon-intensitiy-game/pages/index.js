@@ -67,10 +67,11 @@ export default function Home({ data }) {
         </div>
 
         <div className="results"></div>
-                
+                 
       </main>
 
       <footer className={styles.footer}>
+      <p>ℹ️ This game uses data from the National Grid, Carbon Intensity API https://api.carbonintensity.org.uk/</p>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
