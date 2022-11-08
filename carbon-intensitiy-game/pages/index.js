@@ -98,7 +98,7 @@ export default function Home({ data }) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by
           <span className={styles.logo}>
           <Image src="/biscuit.jpg" alt="Mcvities Victoria biscuits" width={140} height={100} />            
           </span>
