@@ -2,7 +2,6 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useState } from "react";
-//import eventData from '../public/events-data.json';
 import { Events, PrismaClient } from '@prisma/client'
 import moment from 'moment';
 
@@ -84,7 +83,7 @@ export default function Home({ data }) {
           { 
           events.map((event) => {
             return (
-              <a key={event.date} className={styles.card} onClick={() => reveal(event.correct, events)}>
+              <a key={event.date} className={styles.card} onClick={() => reveal(event.correct)}>
                   <h2>{event.name}</h2>
                   <p>{event.date}</p>
                   <Image src={event.image} width={140} height={100} alt='image of event' />  
