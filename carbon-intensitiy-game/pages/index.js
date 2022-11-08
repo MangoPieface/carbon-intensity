@@ -10,10 +10,13 @@ export default function Home({ data }) {
   console.log(eventData);
  
   const fetchEvents = async () => {
-    var myIndex = Math.floor(Math.random() * eventData.length);
-    console.log(myIndex);
-    var event1 = eventData[myIndex];
-    var event2 = eventData[Math.floor(Math.random() * eventData.length)];
+    console.log('FETCH ');
+    console.log(eventData);
+    console.log(eventData.events.length);
+    var myIndex = Math.floor(Math.random() * eventData.events.length);
+    //console.log(myIndex);
+    var event1 = eventData.events[myIndex];
+    var event2 = eventData.events[Math.floor(Math.random() * eventData.events.length)];
     
 console.log(event1);
 
@@ -21,7 +24,11 @@ console.log(event1);
     const carbon2 = await fetch(`/api/carbon/${event2.date}`);
     const carbon1data = await carbon1.json();
     const carbon2data = await carbon2.json();
-    const events = [carbon1data, carbon2data];
+
+    const eventModel1 = { date: event1.date, name: event1.name, carbon: carbon1data.carbonTotal };
+    const eventModel2 = { date: event2.date, name: event2.name, carbon: carbon2data.carbonTotal };
+
+    const events = [eventModel1, eventModel2];
 
     setevents(events);
   };
@@ -47,8 +54,8 @@ console.log(event1);
      
           {events.map((event) => {
             return (
-              <div key={event.requestedDate} className={styles.grid}>
-                  <h2>{event.carbonTotal}</h2>
+              <div key={event.date} className={styles.grid}>
+                  <h2>{event.name} - {event.date} - {event.carbon}</h2>
               </div>
             );
           })}
@@ -70,13 +77,4 @@ console.log(event1);
       </footer>
     </div>
   );
-}
-
-// This gets called on every request
-export async function getServerSideProps() {
-  // Fetch data from external API
-  const data = "HELLO";
-
-  // Pass data to the page via props
-  return { props: { data } }
 }
