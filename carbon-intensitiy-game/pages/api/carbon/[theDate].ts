@@ -42,7 +42,7 @@ export default async function handler(
     var carbonInfo = await request.json() as Carbon 
     
     const total = carbonInfo.data.reduce((sum, current) => 
-           sum + current.intensity.actual, 0);
+           sum + (current.intensity.actual ?? current.intensity.forecast), 0);
     console.log(total + ' from reduce')
 
     var a = new DayTotal(carbonInfo.data[0].from, total);

@@ -6,32 +6,33 @@ import eventData from '../public/events-data.json';
 
 export default function Home({ data }) {
   const [events, setevents] = useState([]);
-
-  console.log(eventData);
  
   const fetchEvents = async () => {
-    console.log('FETCH ');
-    console.log(eventData);
-    console.log(eventData.events.length);
-    var myIndex = Math.floor(Math.random() * eventData.events.length);
-    //console.log(myIndex);
-    var event1 = eventData.events[myIndex];
+    var event1 = eventData.events[Math.floor(Math.random() * eventData.events.length)];
     var event2 = eventData.events[Math.floor(Math.random() * eventData.events.length)];
-    
-console.log(event1);
 
     const carbon1 = await fetch(`/api/carbon/${event1.date}`);
     const carbon2 = await fetch(`/api/carbon/${event2.date}`);
     const carbon1data = await carbon1.json();
     const carbon2data = await carbon2.json();
 
-    const eventModel1 = { date: event1.date, name: event1.name, carbon: carbon1data.carbonTotal };
-    const eventModel2 = { date: event2.date, name: event2.name, carbon: carbon2data.carbonTotal };
+    const eventModel1 = { date: event1.date, name: event1.name, carbon: carbon1data.carbonTotal, image: event1.image, correct: carbon1data.carbonTotal < carbon2data.carbonTotal };
+    const eventModel2 = { date: event2.date, name: event2.name, carbon: carbon2data.carbonTotal, image: event2.image, correct: carbon2data.carbonTotal < carbon1data.carbonTotal};
 
     const events = [eventModel1, eventModel2];
 
     setevents(events);
   };
+
+  function reveal(correct) {
+    if(correct) { alert('You win'); } else { alert('You lose'); }
+
+    const boxes = Array.from(document.getElementsByClassName('hidden'));
+
+    boxes.forEach((box, index) => {
+      box.removeAttribute('class');
+    });
+  }
 
   return (
     <div className={styles.container}>
@@ -51,15 +52,20 @@ console.log(event1);
           </p>
 
           <button onClick={fetchEvents}>Get events</button>
-     
+        <div className={styles.grid}>
           {events.map((event) => {
             return (
-              <div key={event.date} className={styles.grid}>
-                  <h2>{event.name} - {event.date} - {event.carbon}</h2>
-              </div>
+              <a key={event.date} className={styles.card} onClick={() => reveal(event.correct)}>
+                  <h2>{event.name}</h2>
+                  <p>{event.date}</p>
+                  <Image src={event.image} width={140} height={100} />  
+                  <p className={"result hidden"}>{event.carbon}</p>
+              </a>
             );
           })}
-        
+        </div>
+
+        <div className="results"></div>
                 
       </main>
 
