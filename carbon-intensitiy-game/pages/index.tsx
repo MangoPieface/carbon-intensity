@@ -7,13 +7,13 @@ import { PrismaClient } from '@prisma/client'
 export default function Home({ data }) {
   const [events, setevents] = useState([]);
 
-  const eventList = data;
-
   const fetchEvents = async () => {
     document.getElementsByClassName('results')[0].innerHTML = '';
     document.getElementsByClassName('results')[0].setAttribute('class', 'results');
     
     const boxes = Array.from(document.getElementsByClassName('total'));
+  
+    const eventList = [...data];
 
     boxes.forEach((box, index) => {
       box.setAttribute('class', 'total hidden');
@@ -21,10 +21,11 @@ export default function Home({ data }) {
 
     var randomEventNumber = Math.floor(Math.random() * eventList.length);
 
-
-    console.log("Finding event ... " + randomEventNumber);
+  
     var event1 = eventList[Math.floor(randomEventNumber)]; 
     eventList.splice(randomEventNumber, 1);
+    console.log("Event list ... " + data.length);
+
   
     var event2 = eventList[Math.floor(Math.random() * eventList.length)];
 
@@ -104,11 +105,13 @@ export default function Home({ data }) {
             var counter = 1;
             counter += 1;
             return (
-              <a key={event.date} className={styles.card} onClick={() => reveal(event.correct)}>
-                  <h2>{event.name}</h2>
-                  <Image src={event.image} width={140} height={100} alt='image of event' />  
-                  <p className={"total hidden"}>{event.carbon}<small> gCO<sub>2</sub>/kW over 24 hours</small></p>
-              </a>
+              <div className={styles.card}>
+                <a key={event.date} onClick={() => reveal(event.correct)}>
+                    <h2>{event.name}</h2>
+                    {/* <Image src={event.image} width={140} height={100} alt='image of event' />   */}
+                    <p className={"total hidden"}>{event.carbon}<small> gCO<sub>2</sub>/kW over 24 hours</small></p>
+                </a>
+              </div>
             );
           })}
         </div>
