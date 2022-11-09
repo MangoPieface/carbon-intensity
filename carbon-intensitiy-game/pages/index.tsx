@@ -47,11 +47,25 @@ export default function Home({ data }) {
 
   function reveal(correct) {
 
-    console.log('events ' + events);
+    console.log('event[0] ' + events[0].carbon);
+    console.log('event[1] ' + events[1].carbon);
+
+    var diff = 0;
+    if (events[0].carbon < events[1].carbon)
+    {
+      diff = 1-  (events[0].carbon / events[1].carbon);
+      
+    } else {
+      diff = 1 - (events[1].carbon / events[0].carbon);
+    }
+
+    const percentageDiff = Math.floor(diff * 100);
+
+
 
     const resultsBlock = document.getElementsByClassName('results')[0];
 
-    resultsBlock.innerHTML = correct ? 'You win!' : 'You lose!';
+    resultsBlock.innerHTML = correct ? `You win! Energy consumption was ${percentageDiff}% higher on this day for this event` : `You Lose! Energy consumption was ${percentageDiff}% higher on this day for the other event`;
 
     resultsBlock.setAttribute('class', correct ? 'results green innerbox' : 'results red innerbox');
 
@@ -76,19 +90,24 @@ export default function Home({ data }) {
         </h1>
 
         <p className={styles.description}>
-          On which day was the UK National Grid's carbon intensity higher?
+        Carbon intensity is a measure of how clean our electricity is. It refers to how many grams of carbon dioxide (CO<sub>2</sub>) are released to produce a kilowatt hour (kWh) of electricity. 
+
+        Which events do you think had the greatest impact on the total carbon intensity across the day?
         </p>
 
-        <button onClick={fetchEvents}>Let's play!</button>
+        <button className="button-53" onClick={fetchEvents}>Click to play!</button>
+   
         <div className={styles.grid}>
           { 
           events.map((event) => {
+            var counter = 1;
+            console.log('yo ' + events[0].carbon);
+            counter += 1;
             return (
               <a key={event.date} className={styles.card} onClick={() => reveal(event.correct)}>
                   <h2>{event.name}</h2>
-                  <p>{event.date}</p>
                   <Image src={event.image} width={140} height={100} alt='image of event' />  
-                  <p className={"total hidden"}>{event.carbon}</p>
+                  <p className={"total hidden"}>{event.carbon}<small> gCO<sub>2</sub>/kW over 24 hours</small></p>
               </a>
             );
           })}
@@ -99,17 +118,14 @@ export default function Home({ data }) {
       </main>
 
       <footer className={styles.footer}>
-      <p>This game uses data from the National Grid, Carbon Intensity API https://api.carbonintensity.org.uk/</p>
+      <p>This game uses data from the National Grid, Carbon Intensity API 
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
-          rel="noopener noreferrer"
         >
-          Powered by
-          <span className={styles.logo}>
-          <Image src="/biscuit.jpg" alt="Mcvities Victoria biscuits" width={140} height={100} />            
-          </span>
+          https://api.carbonintensity.org.uk/
         </a>
+        </p>
       </footer>
     </div>
   );
