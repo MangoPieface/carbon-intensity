@@ -86,13 +86,14 @@ export default function Home({ data }) {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          Welcome to the carbon intensity game!
+          The Carbon Intensity Challenge
         </h1>
 
         <p className={styles.description}>
         Carbon intensity is a measure of how clean our electricity is. It refers to how many grams of carbon dioxide (CO<sub>2</sub>) are released to produce a kilowatt hour (kWh) of electricity. 
-
-        Which events do you think had the greatest impact on the total carbon intensity across the day?
+       </p>
+        <p className={styles.description}>
+        So which events do you think had the greatest impact on the total carbon intensity across the day?
         </p>
 
         <button className="button-53" onClick={fetchEvents}>Click to play!</button>
