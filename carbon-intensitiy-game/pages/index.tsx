@@ -102,16 +102,11 @@ export default function Home({ data }) {
         <div className={styles.grid}>
           { 
           events.map((event) => {
-            var counter = 1;
-            counter += 1;
             return (
-              <div className={styles.card}>
-                <a key={event.date} onClick={() => reveal(event.correct)}>
+                <a key={event.date} className={styles.card} onClick={() => reveal(event.correct)}>
                     <h2>{event.name}</h2>
-                    {/* <Image src={event.image} width={140} height={100} alt='image of event' />   */}
                     <p className={"total hidden"}>{event.carbon}<small> gCO<sub>2</sub>/kW over 24 hours</small></p>
                 </a>
-              </div>
             );
           })}
         </div>
