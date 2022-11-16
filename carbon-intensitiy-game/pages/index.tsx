@@ -66,7 +66,7 @@ export default function Home({ data }) {
 
     const resultsBlock = document.getElementsByClassName('results')[0];
 
-    resultsBlock.innerHTML = correct ? `Yes! Energy consumption was ${percentageDiff}% higher on this day for the ${eventName}` : `No! Energy consumption was ${percentageDiff}% higher for the ${eventName}`;
+    resultsBlock.innerHTML = correct ? `Yes! The amount of carbon generated was ${percentageDiff}% less on this day for the ${eventName}` : `No! The amount of carbon generated was ${percentageDiff}% higher for the ${eventName}`;
 
     resultsBlock.setAttribute('class', correct ? 'results green innerbox' : 'results red innerbox');
 
